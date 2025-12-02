@@ -27,7 +27,8 @@
 # # Étape 7 : Lancer le JAR
 # CMD ["java", "-jar", "target/student_service-0.0.1-SNAPSHOT.jar"]
 # Image Java 17
-FROM openjdk:17-jdk-slim
+FROM eclipse-temurin:17-jdk
+
 
 # Copie le JAR
 COPY target/student-service-0.0.1-SNAPSHOT.jar app.jar
