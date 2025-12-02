@@ -27,14 +27,21 @@
 # # Étape 7 : Lancer le JAR
 # CMD ["java", "-jar", "target/student_service-0.0.1-SNAPSHOT.jar"]
 # Image Java 17
+# Étape 1 : build avec Maven (optionnel si tu veux builder directement dans Docker)
+FROM maven:3.9.2-eclipse-temurin-17 AS build
+WORKDIR /app
+COPY pom.xml .
+COPY src ./src
+RUN mvn clean package -DskipTests
+
+# Étape 2 : image finale avec Java
 FROM eclipse-temurin:17-jdk
-
-
-# Copie le JAR
-COPY target/student-service-0.0.1-SNAPSHOT.jar app.jar
+WORKDIR /app
+COPY --from=build /app/target/student-service-0.0.1-SNAPSHOT.jar app.jar
 
 # Expose le port utilisé par Render
 EXPOSE 10000
 
-# Lancer l'application Spring Boot
-ENTRYPOINT ["java", "-jar", "/app.jar"]
+# Commande pour démarrer l'application
+ENTRYPOINT ["java", "-jar", "/app/app.jar"]
+
